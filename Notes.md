@@ -26,7 +26,7 @@ Ta-da!
 
 ![Our tiny rock in the middle of eternity](http://puu.sh/g2wzx/efa604da07.jpg)
 
-Now, let's add some armour.
+If you've opened it, great. Now close it. Let's add some armour.
 
 ### Adding armour
 
@@ -58,6 +58,61 @@ This is the file that's describing our `super_mail` armour. We see that it's in 
 
 ![Changed stats](http://puu.sh/g2zCF/477c3bf484.png)
 
-I changed the name of the armour, the description, all file references (like `steel_mail.png` to `super_mail.png`), and gave it a little boost in armour rating, up to 15. That's all we have to do here for now.
+I changed the name of the armour, the description, all file references (like `steel_mail.png` to `super_mail.png`), and gave it a little boost in armour rating, up to 15. That's all we have to do here for now. While we're on this `.json` spree, let's edit `super_mail_iconic.json` accordingly, just filling in the old bits of steel and replacing them with our new dose of SUPER:
 
-**To be continued...**
+![SUPER!](http://puu.sh/g2Gtl/3ad1f94e92.png)
+
+While we already described `super_mail` the **object**, we needed to describe it as `super_mail` the **iconic object**, which is the little minified version of the armour that you see in the stockpile before your guys equip it.
+
+Let's save and close out, then open our StoneVox editor. Make sure not to click anything while it's loading: I found that if the main window doesn't have focus, sometimes it complains and hangs up. Once it's loaded, drag and drop the `super_mail.qb` file into the main StoneVox window.
+
+![Our mail](http://puu.sh/g2Aub/b37f6e0ea1.jpg)
+
+Let's add some modifications to it. Feel free to be as creative as you like. I have the artistic talent of a mindless null, so I'll just recolour some bits on the main armour:
+
+![I'm so sorry, Radiant](http://puu.sh/g2ARh/61fdfca0fb.jpg)
+
+Some tips: use the paintbrush icon to paint voxels, use the pencil to add voxels to the model. Don't forget to change matrices -- think "moving parts" or "components" of a model -- when you want to edit different parts of the body. The `<<` button in the middle right opens up the matrix menu. Hold right mouse to rotate around the model, scroll through the scrollwheel to zoom in or out, and hold middle mouse to pan in any direction. When you're done, take a snapshot of your armour using the photo camera icon on the lower right (we'll use this for our in-game icon of your armour), then press the floppy disk icon in the lower middle-right to export the file as a `.qb` file. You will find both the `.png` file and the `.qb` file in the directory where you put StoneVox:
+
+![There's Waldo](http://puu.sh/g2BSk/3db64b4611.jpg)
+
+Grab them from that folder, and put them back into `stonehearth/entities/armor/super_mail`. Overwrite when promped. If you're still feeling inspired from editing that platemail, feel free to also edit the `iconic` file and the `female` variant.
+
+Okay. So now we've got our `super_mail`, the item. The only thing we need to do now is to tell Stonehearth that it exists. Stonehearth's main reference for all the entities it has access to is the `manifest.json` file. It associates in-code references with on-disk file assets, such as everything we've created for our Super Mail thus far. Clearly, it had to have associated steel mail with its resources at some point. We remember that steel mail was referred to in code as `steel_mail`. So let's open up `manifest.json` and do a search for `steel_mail`:
+
+![Thoughts of armour](http://puu.sh/g2CvQ/dcec0a3bff.png)
+
+Among other things, we see how `steel_mail` was exposed to Stonehearth. Let's plagiarize! A copy here, a paste there, a fix hither, a hack yonder, and we end up with:
+
+![IT CAN SEE US NOW](http://puu.sh/g2CK5/c6ca377e0c.png)
+
+Great. On paper, at least. What's the motivation for doing all this if you can't see it in-game? Great question, let's solve it. We haven't put this armour as a recipe for the blacksmith yet, so there's no in-game way we can get it. However, for testing purposes, we can cheat it into the game by generating a world right with it!
+
+### Testing the armour
+
+Let's open up `mods/microworld/worlds/mini_game_world.lua` -- the file that's responsible for populating our microworld whenever we launch it -- and look near the bottom:
+
+![Ooooh](http://puu.sh/g2F64/964d56dcac.png)
+
+It looks like the world automatically gives our hearthlings some items. Let's give one of the hearthlings the armour that we generated, as well as a wooden sword to promote them to soldier:
+
+![Terrible code is terrible](http://puu.sh/g2Fy8/4707c2eeba.png)
+
+(P. S. I know I'm doing it extremely wrong, I should be giving them the iconic version, but I really don't know how to do that yet :x)
+
+Now go back to the terminal, and press the Up Arrow key to re-type the secret incantation (I may have used it more than once):
+
+![spamspamspam](http://puu.sh/g2FNd/e72921682e.png)
+
+Once inside the Microworld, create a stockpile, promote a Hearthling (in my case, it has to be a male, as I've only modified the male Steel Mail) to a footman. After the armour gets dropped (and turns into its iconic version), then placed into the stockpile, watch your footman equip the suit of armour (as of this testing, helmets were malfunctioning):
+
+![I CURSE THE GODS THAT ALLOWED ME TO EXIST](http://puu.sh/g2G22/c0d9df1bc2.jpg)
+
+Yaaay!
+
+### Todo:
+
+ * Making armour craftable
+ * Adding custom resource
+ * Adding buff script to resource
+ * Packaging into `.smod`
