@@ -116,3 +116,4 @@ Yaaay!
  * Adding custom resource
  * Adding buff script to resource
  * Packaging into `.smod`
+ * Let me know if you want me to write the rest
