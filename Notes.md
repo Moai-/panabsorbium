@@ -116,4 +116,5 @@ Yaaay!
  * Adding custom resource
  * Adding buff script to resource
  * Packaging into `.smod`
+ * Reupload images to imgur rather than puush, for permanence
  * Let me know if you want me to write the rest
