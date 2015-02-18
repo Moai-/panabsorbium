@@ -1,4 +1,5 @@
 # Panabsorbium
+![Why red and white? Because I like red and white, that's why](http://puu.sh/g2sdz/0038d5f423.png)
 
 ## What
 This is a mod for the game Stonehearth. It's a simple armour mod with a crafting chain. Adds the following:
@@ -26,4 +27,4 @@ This mod was written by me, [@Moai](http://discourse.stonehearth.net/users/moai)
 Clone this repository into your `Stonehearth/mods` directory.
 
 ## More
-If you're a beginner to modding like myself, you might want to check out the `Notes.md` file included with this mod, which documents some of what I've learned while writing this mod. If you're a pro, you can still check it out and then send me PMs making fun of me for it. I like PMs.
+If you're a beginner to modding like myself, you might want to check out the `Notes.md` file included with this mod, which documents some of what I've learned while writing this mod. If you're a pro, you can still check it out and let me know if I'm incorrect / missed something.
