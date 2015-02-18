@@ -1,30 +1,22 @@
-# Panabsorbium
-![Why red and white? Because I like red and white, that's why](http://puu.sh/g2sdz/0038d5f423.png)
+So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth came along. Because we don't have a scientific education or imagination, we'll go ahead and make a suit of armour out of them.
 
-## What
-This is a mod for the game Stonehearth. It's a simple armour mod with a crafting chain. Adds the following:
-  * A Panabsorbium ingot, made with 4 silver ingots, 2 gold ingots, and 1 wood resource
-  * A Panabsorbium Vest, made with 4 Panabsorbium ingots, a cloth, and a thread, and providing 15 defense
-  * A speed-increasing buff for the wearer of the Vest
+### Tools and Setup
 
-## Why
-There are currently no uses for gold and silver. I wanted a functional sink for those resources (e.g. not just decoration). Just making a tougher stronger armour didn't have enough "oomph" over the existing Steel Mail, so this vest also adds a speed buff to the footman wearing it.
+I use the following for my Stonehearth modding:
+  * [Lua Unminifier](http://discourse.stonehearth.net/t/lua-unminifier-formatter-improved/8217) (though not required for this mod)
+  * [StoneVox](http://discourse.stonehearth.net/t/stonevox-3d-community-voxel-modeler-for-stonehearth-v-0-0-6/8664)
+  * [Notepad++](http://notepad-plus-plus.org/)
+  * [Microworld mod](https://github.com/stonehearth/microworld)
 
-I also wanted to have a very simple reference for adding new stuff into the game, as an introduction to modding Stonehearth. I will refer to it when I need to copy-paste a Stonehearth project seed. Feel free to use it as a starting basis for your own materials / crafting chain mod. 
+First, I make a `mods_bup` directory inside Stonehearth's root directory (`Steam\steamapps\common\Stonehearth\mods` for me, as I use the Steam version), into which I copy (backup) the contents of the `mods` folder. We'll be messing with Stonehearth's data, so we want to keep the originals handy in case if we explode something.
 
-## Who
-A huge thank you to [@honestabelink](http://discourse.stonehearth.net/users/honestabelink/) for creating the [Lua Unminifier](http://discourse.stonehearth.net/t/lua-unminifier-formatter-improved/8217) and the awesome [StoneVox](http://discourse.stonehearth.net/t/stonevox-3d-community-voxel-modeler-for-stonehearth-v-0-0-6/8664), which I've both used in the creation of this mod, and am seeing myself use for future SH mods. Another thank you to [@RepeatPan](http://discourse.stonehearth.net/users/repeatpan) for giving me a run-down on SH's mixin/mixinto system. And of course to Radiant for creating this awesome game.
+![Don't look at my tautological folder structure *hides*](http://puu.sh/g2vbL/00174bb1e7.png)
 
-This mod was written by me, [@Moai](http://discourse.stonehearth.net/users/moai). I bastardized Radiant's Cloth Padded Vest and the Devoted buff icon (in MS Paint, no less) for the armour and buff icon assets.
+Next, I open up `stonehearth.smod` inside the `mods` directory, extract it, and delete `stonehearth.smod` so that SH is forced to read the unpacked version. I do this with all `.smod` files in the `mods` directory.
 
-## How
-1. [Download .smod](https://www.dropbox.com/s/vvo1zjmaiypgb3k/panabsorbium.smod?dl=0).
-2. Drop `panabsorbium.smod` into your `Stonehearth/mods` directory.
-3. Push button, enjoy bacon.
+![I'm using TortoiseGit, if you're wondering about the icons](http://puu.sh/g2vyT/075a151593.png)
 
-**OR**
+`.smod` files are renamed zip files, and can be opened by programs like WinZip, [WinRAR](http://www.rarlab.com/download.htm), and so on. We do this in order to be able to quickly modify Stonehearth and then test our modifications in the same breath. Otherwise we'd have to unzip the smod, make our changes, and zip it back up. Stonehearth reads both `.smod` files and simple directories, so we use that to our advantage.
 
-Clone this repository into your `Stonehearth/mods` directory.
+### 
 
-## More
-If you're a beginner to modding like myself, you might want to check out the `Notes.md` file included with this mod, which documents some of what I've learned while writing this mod. If you're a pro, you can still check it out and let me know if I'm incorrect / missed something.
