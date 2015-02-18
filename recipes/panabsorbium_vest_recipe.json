@@ -11,6 +11,14 @@
       {
          "uri" : "panabsorbium:refined:panabsorbium_ingot",
          "count" : 4
+      },
+      {
+        "material" : "cloth resource",
+        "count" : 1
+      },
+      {
+         "material" : "thread resource",
+         "count" : 1
       }
   ],
   "produces": [
