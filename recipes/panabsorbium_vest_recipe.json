@@ -1,0 +1,21 @@
+{
+   "type":"recipe",
+
+   "work_units"  : 8,
+   "recipe_name" : "Panabsorbium Vest",
+   "description" : "Strong but light armour.",
+   "flavor" : "It's cold to the touch.",
+   "portrait"    : "/panabsorbium/entities/armor/panabsorbium_vest/panabsorbium_vest.png",
+
+   "ingredients": [
+      {
+         "uri" : "panabsorbium:refined:panabsorbium_ingot",
+         "count" : 4
+      }
+  ],
+  "produces": [
+      {
+         "item":"panabsorbium:armor:panabsorbium_vest"
+      }
+  ]
+}

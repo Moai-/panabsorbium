@@ -1,0 +1,18 @@
+{
+  "craftable_recipes" : {
+    "smelt" : {
+      "recipes" : {
+        "panabsorbium_ingot" : {
+          "recipe" : "file(panabsorbium_ingot_recipe.json)"
+        }
+      }
+    },
+    "armor" : {
+      "recipes" :{
+        "panabsorbium_vest" : {
+          "recipe" : "file(panabsorbium_vest_recipe.json)"
+        }
+      }
+    }
+  }
+}

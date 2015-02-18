@@ -1,0 +1,11 @@
+{
+   "type" : "buff",
+   "name" : "Panabsorbium Rush",
+   "description" : "Panabsorbium's lightness allows for freedom of movement",
+   "icon" : "file(panabsorbium_rush_buff.png)",
+   "modifiers" : {
+      "speed" : {
+         "multiply" : 1.4
+      }
+   }
+} 

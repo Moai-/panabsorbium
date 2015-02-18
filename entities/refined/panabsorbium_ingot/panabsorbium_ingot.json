@@ -1,0 +1,40 @@
+{
+   "mixins": "stonehearth:mixins:item_properties",
+   "type": "entity",
+   "components": {
+      "item": {
+         "material": "panabsorbium ingot",
+         "category": "resources",
+         "stacks": 40
+      },
+      "stonehearth:material" : {
+         "tags" : "panabsorbium ingot resource"
+      },
+      "model_variants": {
+         "default": {
+            "models": [
+               "file(panabsorbium_ingot.qb)"
+            ]
+         }
+      },
+      "unit_info": {
+         "name": "Panabsorbium Ingot",
+         "description": "A mess of valuable metals turned into a tough but light alloy.",
+         "flavor": "A show of your blacksmith's skill",
+         "icon" : "file(panabsorbium_ingot.png)"
+      }
+   },
+   "entity_data" : {
+      "stonehearth:net_worth" : {
+         "value_in_gold" : 250,
+         "rarity" : "common",
+         "shop_info" : {
+            "buyable" : true,   
+            "sellable" : true,
+            "shopkeeper_level" : 1,
+            "shopkeeper_type" : "caravan"
+         }
+      }
+   }   
+
+}

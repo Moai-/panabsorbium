@@ -1,0 +1,15 @@
+{
+  "info" : {
+    "name" : "Panabsorbium",
+    "version" : 1
+  },
+  "aliases" : {
+    "armor:panabsorbium_vest" : "file(entities/armor/panabsorbium_vest)",
+    "refined:panabsorbium_ingot" : "file(entities/refined/panabsorbium_ingot)",
+    "buffs:panabsorbium_rush" : "file(data/buffs/panabsorbium_rush/panabsorbium_rush_buff.json)"
+  },
+  
+  "mixintos" : {
+    "stonehearth/jobs/blacksmith/recipes/recipes.json" : "file(recipes/recipes.json)"
+  }
+}

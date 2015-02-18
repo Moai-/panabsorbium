@@ -1,0 +1,57 @@
+{
+   "type": "entity",
+   "mixins" : "stonehearth:mixins:item_properties",
+   "components" : {
+      "item" : {
+         "category" : "armor"   
+      },
+      "unit_info" : {
+         "name" :  "Panabsorbium Vest",
+         "description" : "Strong but light armour.",
+         "icon" : "file(panabsorbium_vest.png)"
+      },
+      "model_variants": {
+         "default": {
+            "layer": "clothing",
+            "models": [
+               "file(panabsorbium_vest.qb)"
+            ]
+         },
+         "female" : {
+            "layer": "clothing",
+            "models": [
+               "file(panabsorbium_vest_female.qb)"
+            ]
+         }
+      },
+      "stonehearth:material" : {
+         "tags" :  "armor heavy_armor panabsorbium"
+      },
+      "stonehearth:entity_forms" : {
+         "iconic_form" : "file(panabsorbium_vest_iconic.json)"
+      },
+      "stonehearth:equipment_piece" : {
+         "slot" : "torso",
+         "render_type" : "merge_with_model",
+         "roles" : "combat",
+         "ilevel" : 2,
+         "injected_buffs" : [ "panabsorbium:buffs:panabsorbium_rush" ],
+         "equip_effect" : "/stonehearth/data/effects/level_up"
+      }
+   },
+   "entity_data" : {
+      "stonehearth:combat:armor_data" : {
+         "base_damage_reduction" : 15
+      },
+      "stonehearth:net_worth" : {
+         "value_in_gold" : 1000,
+         "rarity" : "common",
+         "shop_info" : {
+            "buyable" : true,   
+            "sellable" : true,
+            "shopkeeper_level" : 1,
+            "shopkeeper_type" : "caravan"
+         }
+      }
+   }      
+}
