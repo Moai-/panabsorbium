@@ -1,4 +1,4 @@
-So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth came along. Because we don't have a scientific education or imagination, we'll go ahead and make a suit of armour out of them.
+So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth entered Alpha. Because we don't have a scientific education or imagination, we'll go ahead and make a suit of armour out of them.
 
 ### Tools and Setup
 
@@ -7,24 +7,34 @@ I use the following for my Stonehearth modding:
   * [StoneVox](http://discourse.stonehearth.net/t/stonevox-3d-community-voxel-modeler-for-stonehearth-v-0-0-6/8664)
   * [Notepad++](http://notepad-plus-plus.org/)
   * [Microworld mod](https://github.com/stonehearth/microworld)
+ 
+If you already have these tools, or if you're using something else (e.g. Qubicle Constructor instead of StoneVox), feel free to skip the following section.
 
-First, I make a `mods_bup` directory inside Stonehearth's root directory (`Steam\steamapps\common\Stonehearth\mods` for me, as I use the Steam version), into which I copy (backup) the contents of the `mods` folder. We'll be messing with Stonehearth's data, so we want to keep the originals handy in case if we explode something.
+I like to keep my tools close to where I use them, so I create a folder called "tools" in my Stonehearth root directory (`Steam\steamapps\common\Stonehearth` for me, as I use the Steam version -- this is what I mean whenever I refer to "Stonehearth root directory"). I extract the Lua Unminifier and StoneVox programs into it:
 
-![Don't look at my tautological folder structure *hides*](http://puu.sh/g2vbL/00174bb1e7.png)
+![Thusly](http://i.imgur.com/jgNBwbD.png)
+
+Once I have `microworld.smod`, I drop it into my `mods` folder. Notepad++ is fairly easy to install on Windows. Yours won't look exactly like mine, but the idea should be similar enough. To run StoneVox, I run `run.bat` in its folder; to run Lua Unminifier, I run `LuaUnminifier.exe` in its folder.
+
+Ok, got all the tools? Great.
+
+First, I make a `mods_bup` directory inside Stonehearth's root directory , into which I copy (backup) the contents of the `mods` folder. We'll be messing with Stonehearth's data, so we want to keep the originals handy in case if we explode something.
+
+![Don't look at my tautological folder structure *hides*](http://i.imgur.com/C8BPodN.png)
 
 Next, I open up `stonehearth.smod` inside the `mods` directory, extract it, and delete `stonehearth.smod` so that SH is forced to read the unpacked version. I do this with all `.smod` files in the `mods` directory. `.smod` files are renamed zip files, and can be opened by programs like WinZip, [WinRAR](http://www.rarlab.com/download.htm), and so on. 
 
-![I'm using TortoiseGit, if you're wondering about the icons](http://puu.sh/g2vyT/075a151593.png)
+![I'm using TortoiseGit, if you're wondering about the icons](http://imgur.com/eAlHG11)
 
 We do this in order to be able to quickly modify Stonehearth and then test our modifications in the same breath. Otherwise we'd have to unzip the smod, make our changes, and zip it back up. Stonehearth reads both `.smod` files and simple directories, so we use that to our advantage.
 
 Finally, we launch Stonehearth with the Microworld mod. To do this, I navigate to my root Stonehearth directory, and open a command window there. I type in the following incantation to summon up an instance of our Microworld:
 
-![Stonehearth.exe --game.main_mod=microworld](http://puu.sh/g2wq9/0ff06615c3.jpg)
+![Stonehearth.exe --game.main_mod=microworld](http://imgur.com/COJj3Yl)
 
 Ta-da!
 
-![Our tiny rock in the middle of eternity](http://puu.sh/g2wzx/efa604da07.jpg)
+![Our tiny rock in the middle of eternity](http://i.imgur.com/bCn0TBz.png)
 
 If you've opened it, great. Now close it. Let's add some armour.
 
