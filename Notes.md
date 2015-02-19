@@ -432,11 +432,15 @@ Start the Microworld again, promote a Hearthling to blacksmith and another to fo
 
 ![also sprach zarathustra in the background intensifies](http://i.imgur.com/3SRzehl.png)
 
+
+
 ### Todo:
 
- * Making armor craftable
+ * _Making armor craftable_
  * Adding custom resource
  * Adding buff script to resource
  * Packaging into `.smod`
- * Reupload images to imgur rather than puush, for permanence
+ * _Reupload images to imgur rather than puush, for permanence_
  * Let me know if you want me to write the rest
+
+### To Be Continued
