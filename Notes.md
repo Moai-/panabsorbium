@@ -40,7 +40,7 @@ Ta-da!
 
 ![Our tiny rock in the middle of eternity](http://i.imgur.com/bCn0TBz.png)
 
-If you've opened it, great. Now close it. Let's add some armour.
+If you've opened it, great. You've seen how fast it is to load, and how it skips the title page, letting you code lightning-fast. Now close it. Let's add some armour.
 
 ### Adding armour
 
@@ -127,37 +127,138 @@ Since we've already established that the `.json` file is the heart of our object
        }   
     }
 
-This is the file that's describing our `super_mail` armour. We see that it's in the `armor` category (oh, and pardon my Canadian spelling /late), that it's called a *Full Platemail* ingame, it's got a description, the icon it uses in game, what `.qb` objects render it in 3d, what material it's made of, what it looks like before a Hearthling puts it on, how exactly Stonehearth should put it on the Hearthling, how much armour rating it actually provides our Hearthling, and how much it's worth in gold. Wow, that was a mouthful, wasn't it? Let's change up some of these stats.
+Well, it may look like a lot, but it really isn't. When you see something in the code that you don't know about, leave it alone, and only poke it if it starts causing problems. Having said that, here are some of the fields that might interest us:
 
-![Changed stats](http://puu.sh/g2zCF/477c3bf484.png)
+(note: if you're unfamiliar with JSON, `unit_info.name` is referring to the `name` property inside the `unit_info`'s braces)
 
-I changed the name of the armour, the description, all file references (like `steel_mail.png` to `super_mail.png`), and gave it a little boost in armour rating, up to 15. That's all we have to do here for now. While we're on this `.json` spree, let's edit `super_mail_iconic.json` accordingly, just filling in the old bits of steel and replacing them with our new dose of SUPER:
+ * `unit_info.name`: The in-game name of this entity.
+ * `unit_info.description`: The description seen on the entity.
+ * `unit_info.icon`: A PNG file representing the entity in menus and the like.
+ * `model_variants`: Here, we link the QB files to the default (male) and female armour variants.
+ * `stonehearth:entity_forms.iconic_form`: This is the QB file that will represent the iconic form of your armour.*
+ * `entity_data.stonehearth:combat:armor_data.base_damage_reduction`: What a mouthful, thankfully pretty self-explanatory. It determines how effective your armour is at stopping damage dealt to the Hearthling.
+ 
+*Think stockpiles: a piece of armour looks way different when it's stored in a stockpile (or carried by a Hearthling as an item) versus when it's being worn by a Hearthling. As far as Stonehearth is concerned, these are two separate objects! They turn into one another depending on the in-game circumstances.
 
-![SUPER!](http://puu.sh/g2Gtl/3ad1f94e92.png)
+Let's change some of these around. You've probably noticed file references that look like this: `"icon" : "file(steel_mail.png)"`. This refers to the file called `steel_mail.png` in the same directory as this `.json` file. We have no such thing in this folder; we have one called `panabsorbium_vest.png` now. Let's change this and all other file references accordingly:
 
-While we already described `super_mail` the **object**, we needed to describe it as `super_mail` the **iconic object**, which is the little minified version of the armour that you see in the stockpile before your guys equip it.
+    "icon" : "file(panabsorbium_vest.png)"
+    "models": [
+       "file(panabsorbium_vest.qb)"
+    ]
+    "models": [
+       "file(panabsorbium_vest_female.qb)"
+    ]
+    "iconic_form": "file(panabsorbium_vest_iconic.json"
 
-Let's save and close out, then open our StoneVox editor. Make sure not to click anything while it's loading: I found that if the main window doesn't have focus, sometimes it complains and hangs up. Once it's loaded, drag and drop the `super_mail.qb` file into the main StoneVox window.
+Good. Now, the fun parts:
 
-![Our mail](http://puu.sh/g2Aub/b37f6e0ea1.jpg)
+    "name": "Panabsorbium Vest"
+    "description": "It's cold to the touch"
+    "base_damage_reduction": 15
 
-Let's add some modifications to it. Feel free to be as creative as you like. I have the artistic talent of a mindless null, so I'll just recolour some bits on the main armour:
+The JSON-ish "heart" of the armour is now configured. The armour is now cheesy, and stops lots of damage. Remember, though, as was mentioned before, that many objects, including armours, have two forms. One is when the object is worn, and the other is a smaller, less detailed version that's shown when it's on the ground, in a stockpile, or being carried by a Hearthling. This is called the "iconic" form, and it's considered a separate, though related, object by Stonehearth. It also comes with its own JSON file, the renamed `panabsorbium_vest_iconic.json`. Let's pop it open.
 
-![I'm so sorry, Radiant](http://puu.sh/g2ARh/61fdfca0fb.jpg)
+    {
+       "mixins": "stonehearth:mixins:item_properties",
+       "type": "entity",
+       "components": {
+          "unit_info" : {
+             "name": "Full Platemail",
+             "description": "A full suit of steel armor",
+             "icon" : "file(steel_mail.png)"
+          },
+          "model_variants": {
+             "default": {
+                "models": [
+                   "file(steel_mail_iconic.qb)"
+                ]
+             }
+          },
+          "mob" : {
+             "model_origin" : { "x": -0.05, "y": 0, "z": 0.05 }
+          },
+          "stonehearth:material" : {
+             "tags" : "steel armor heavy_armor"
+          }
+       }
+    }
 
-Some tips: use the paintbrush icon to paint voxels, use the pencil to add voxels to the model. Don't forget to change matrices -- think "moving parts" or "components" of a model -- when you want to edit different parts of the body. The `<<` button in the middle right opens up the matrix menu. Hold right mouse to rotate around the model, scroll through the scrollwheel to zoom in or out, and hold middle mouse to pan in any direction. When you're done, take a snapshot of your armour using the photo camera icon on the lower right (we'll use this for our in-game icon of your armour), then press the floppy disk icon in the lower middle-right to export the file as a `.qb` file. You will find both the `.png` file and the `.qb` file in the directory where you put StoneVox:
+Since the iconic form can't be equipped, there are no combat stats here of any sort. Instead, we've got the name and description, which we can fill from the previous file with copy/paste, and some broken file references. Fixing these, we get:
 
-![There's Waldo](http://puu.sh/g2BSk/3db64b4611.jpg)
+    {
+       "mixins": "stonehearth:mixins:item_properties",
+       "type": "entity",
+       "components": {
+          "unit_info" : {
+             "name": "Panabsorbium Vest",
+             "description": "It's cold to the touch",
+             "icon" : "file(panabsorbium_vest.png)"
+          },
+          "model_variants": {
+             "default": {
+                "models": [
+                   "file(panabsorbium_vest_iconic.qb)"
+                ]
+             }
+          },
+          "mob" : {
+             "model_origin" : { "x": -0.05, "y": 0, "z": 0.05 }
+          },
+          "stonehearth:material" : {
+             "tags" : "steel armor heavy_armor"
+          }
+       }
+    }
+ 
+Okay! Our JSON work is done for now. Both the regular form and the iconic form of the armour is configured. Let's see if we can make some cool looking armour out of this.
 
-Grab them from that folder, and put them back into `stonehearth/entities/armor/super_mail`. Overwrite when promped. If you're still feeling inspired from editing that platemail, feel free to also edit the `iconic` file and the `female` variant.
+Let's save our work and close out, then open our StoneVox editor. Make sure not to click anything while it's loading: I found that if the main window doesn't have focus, sometimes it complains and hangs up. Once it's loaded, drag and drop the `panabsorbium_vest.qb` file into the main StoneVox window.
 
-Okay. So now we've got our `super_mail`, the item. The only thing we need to do now is to tell Stonehearth that it exists. Stonehearth's main reference for all the entities it has access to is the `manifest.json` file. It associates in-code references with on-disk file assets, such as everything we've created for our Super Mail thus far. Clearly, it had to have associated steel mail with its resources at some point. We remember that steel mail was referred to in code as `steel_mail`. So let's open up `manifest.json` and do a search for `steel_mail`:
+![Our mail](http://i.imgur.com/Z8hxB5J.png)
 
-![Thoughts of armour](http://puu.sh/g2CvQ/dcec0a3bff.png)
+There's the old Steel Mail qb file. Although pretty, as of this writing (Stonehearth in Alpha 9), the helmet does not render on Hearthlings properly. So, rather than using the Steel Mail as a template for our armour, let's look around. Note: again, as of this writing, StoneVox gets grumpy when you try to load more than one file per program execution. Before loading more `.qb` files, close the program, then execute `run.bat` again.
+
+After looking around, I've decided to settle on `leather_vest.qb` as a template for my male/default armour, from the `leather_vest` folder...
+
+![Thanks Radiant](http://i.imgur.com/xKBUjk1.png)
+
+... and `cloth_padded_vest_female.qb`, from `cloth_padded_vest`, for my female armour:
+
+![Thanks again Radiant](http://i.imgur.com/ESmBnnk.png)
+
+Let's not forget about the iconic file, too, which I'll steal once again from `cloth_padded_vest_iconic.qb`:
+
+![And again](http://i.imgur.com/dgywvcH.png)
+
+Add some modifications to it. Feel free to be as creative as you like. 
+
+Some tips: use the paintbrush icon to paint voxels, use the pencil to add voxels to the model. Don't forget to change matrices -- think "moving parts" or "components" of a model -- when you want to edit different parts of the body. The `<<` button in the middle right opens up the matrix menu. The iconic model doesn't have these, as it doesn't have any animated parts. Hold right mouse to rotate around the model, scroll through the scrollwheel to zoom in or out, and hold middle mouse to pan in any direction. When you're done, take a snapshot of your armour (just the male/default one) using the photo camera icon on the lower right (we'll use this for our in-game icon of your armour), then press the floppy disk icon in the lower middle-right to export the file as a `.qb` file. You will find both the `.png` file and the `.qb` file in the directory where you put StoneVox:
+
+![There's Waldo](http://imgur.com/OsONwVN)
+
+Grab them from that folder, and put them back into `stonehearth/entities/armor/panabsorbium_vest`. For posterity, here's what I ended up with:
+
+![Male, female, and iconic, from left to right](http://i.imgur.com/RluUbCY.png)
+
+And the icon...
+
+![Red and white, boros represent](http://i.imgur.com/HTua2kR.png)
+
+Okay. So now we've got our `panabsorbium_vest`, the item. The only thing we need to do now is to tell Stonehearth that it exists. Stonehearth's main reference for all the entities it has access to is the `manifest.json` file. It associates in-code references with on-disk file assets, such as everything we've created for our Super Mail thus far. Clearly, it had to have associated steel mail with its resources at some point. We remember that steel mail was referred to in code as `steel_mail`. So let's open up `manifest.json` and do a search for `steel_mail`:
+
+    "armor:iron_mail" : "file(entities/armor/iron_mail)",
+    "armor:steel_mail" : "file(entities/armor/steel_mail)",
+    "armor:wooden_shield" : "file(entities/armor/wooden_shield)",
+    "armor:basic_shield" : "file(entities/armor/basic_shield)",
 
 Among other things, we see how `steel_mail` was exposed to Stonehearth. Let's plagiarize! A copy here, a paste there, a fix hither, a hack yonder, and we end up with:
 
-![IT CAN SEE US NOW](http://puu.sh/g2CK5/c6ca377e0c.png)
+    "armor:iron_mail" : "file(entities/armor/iron_mail)",
+    "armor:steel_mail" : "file(entities/armor/steel_mail)",
+    "armor:panabsorbium_vest" : "file(entities/armor/panabsorbium_vest)",
+    "armor:wooden_shield" : "file(entities/armor/wooden_shield)",
+    "armor:basic_shield" : "file(entities/armor/basic_shield)",
 
 Great. On paper, at least. What's the motivation for doing all this if you can't see it in-game? Great question, let's solve it. We haven't put this armour as a recipe for the blacksmith yet, so there's no in-game way we can get it. However, for testing purposes, we can cheat it into the game by generating a world right with it!
 
