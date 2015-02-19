@@ -1,3 +1,7 @@
+# Do It Yourself
+
+If you want to take the long route and put this mod together yourself, you're in the right place. Some blind poking around may take place, as this tutorial roughly mirrors my own experience writing this mod.
+
 So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth entered Alpha. Because we don't have a scientific education or imagination, we'll go ahead and make a suit of armour out of them.
 
 ### Tools and Setup
@@ -8,11 +12,11 @@ I use the following for my Stonehearth modding:
   * [Notepad++](http://notepad-plus-plus.org/)
   * [Microworld mod](https://github.com/stonehearth/microworld)
  
-If you already have these tools, or if you're using something else (e.g. Qubicle Constructor instead of StoneVox), feel free to skip the following section.
+If you already have these tools, or if you're using something else (e.g. Qubicle Constructor instead of StoneVox, SublimeText instead of Notepad++ and Lua Unminifier), feel free to skip the following section. Keep in mind that this tutorial assumes you're using the setup mentioned above/below.
 
 I like to keep my tools close to where I use them, so I create a folder called "tools" in my Stonehearth root directory (`Steam\steamapps\common\Stonehearth` for me, as I use the Steam version -- this is what I mean whenever I refer to "Stonehearth root directory"). I extract the Lua Unminifier and StoneVox programs into it:
 
-![Thusly](http://i.imgur.com/jgNBwbD.png)
+![Thusly](http://i.imgur.com/jNUxF5X.png)
 
 Once I have `microworld.smod`, I drop it into my `mods` folder. Notepad++ is fairly easy to install on Windows. Yours won't look exactly like mine, but the idea should be similar enough. To run StoneVox, I run `run.bat` in its folder; to run Lua Unminifier, I run `LuaUnminifier.exe` in its folder.
 
@@ -22,15 +26,15 @@ First, I make a `mods_bup` directory inside Stonehearth's root directory , into 
 
 ![Don't look at my tautological folder structure *hides*](http://i.imgur.com/C8BPodN.png)
 
-Next, I open up `stonehearth.smod` inside the `mods` directory, extract it, and delete `stonehearth.smod` so that SH is forced to read the unpacked version. I do this with all `.smod` files in the `mods` directory. `.smod` files are renamed zip files, and can be opened by programs like WinZip, [WinRAR](http://www.rarlab.com/download.htm), and so on. 
+Next, I open up `stonehearth.smod` inside the `mods` directory, extract it, and delete `stonehearth.smod` so that SH is forced to read the unpacked version. These are the files we're going to be playing with. I do this with all `.smod` files in the `mods` directory. `.smod` files are renamed zip files, and can be opened by programs like WinZip, [WinRAR](http://www.rarlab.com/download.htm), and so on. 
 
-![I'm using TortoiseGit, if you're wondering about the icons](http://imgur.com/eAlHG11)
+![I'm using TortoiseGit, if you're wondering about the icons](http://i.imgur.com/eAlHG11.png)
 
 We do this in order to be able to quickly modify Stonehearth and then test our modifications in the same breath. Otherwise we'd have to unzip the smod, make our changes, and zip it back up. Stonehearth reads both `.smod` files and simple directories, so we use that to our advantage.
 
 Finally, we launch Stonehearth with the Microworld mod. To do this, I navigate to my root Stonehearth directory, and open a command window there. I type in the following incantation to summon up an instance of our Microworld:
 
-![Stonehearth.exe --game.main_mod=microworld](http://imgur.com/COJj3Yl)
+![Stonehearth.exe --game.main_mod=microworld](http://i.imgur.com/COJj3Yl.png)
 
 Ta-da!
 
@@ -42,27 +46,86 @@ If you've opened it, great. Now close it. Let's add some armour.
 
 As a modder, Ctrl+C is my shield, Ctrl+V is my sword. We'll be using these quite a lot here, and thankfully modding Stonehearth is pretty much limited to that until you want to do some really serious stuff with Lua (and even then, I imagine, those two will be your duct tape and WD-40 a great deal of time). First, let's take a look as to what existing armour looks like.
 
-Using Lua Unminifier, open `stonehearth.smod` inside your `mods_bup` directory. As far as I know, Lua Unminifier doesn't write to files inside `.smod`s, so we're safe using it just as a good way to navigate the game's files. 
+Using Lua Unminifier, open `stonehearth.smod` inside your `mods_bup` directory. As far as I know, Lua Unminifier doesn't write to files inside `.smod`s, so we're safe using it just as a good way to navigate and search the game's files. 
 
-![It should look like this](http://puu.sh/g2xsr/cdd41929d8.jpg)
+![It should look like this](http://i.imgur.com/5aztqWf.png)
 
 Take a minute to open up Stonehearth and browse through its file directory. Many things are in directories that make sense, such as all of our armours being inside `entities/armor`, all blacksmith recipes being in `jobs/blacksmith/recipes`, and so on. So let's pop open `steel_mail`:
 
-![The atoms of a Stonehearth steel mail](http://puu.sh/g2xYT/bde3c5a0bb.png)
+![The atoms of a Stonehearth steel mail](http://i.imgur.com/chVBZsd.png)
 
-Stonehearth defines entities -- "things", like trees, clothing, resources, sheep, Hearthlings, etc -- inside `.json` files. All the information for a particular entity that Stonehearth needs is either located or referenced inside that main `.json` file. What does a `.json` file for `steel_mail` look like, you ask? Well, you'll have to open the file and look yourself, if you're so curious. I'm here to add armour! I imagine my armour will be no less strong than steel mail, so I'll give my mighty Copy/Paste sword a swing:
+Stonehearth defines entities -- "things", like trees, clothing, resources, sheep, Hearthlings, etc -- inside `.json` files. All the information for a particular entity that Stonehearth needs is either located or referenced inside that main `.json` file with the same name as the armour. What does a `.json` file for `steel_mail` look like, you ask? Well, you'll have to open the file and look yourself, if you're so curious. I'm here to add armour! I imagine my armour will be no less strong than steel mail, so I'll give my mighty Copy/Paste sword a swing:
 
-![Whoosh](http://puu.sh/g2yuJ/548ff02d48.png)
+![Whoosh](http://i.imgur.com/2eRReno.png)
 
 Well... okay. We don't want it to be JUST like steel mail, we want it to be *better*. Let's rename it to something.
 
-![Good enough](http://puu.sh/g2yKt/29a67597ea.png)
+![Good enough](http://i.imgur.com/b5v9G6i.png)
 
-![Apply the same logic to the files inside the directory](http://puu.sh/g2yXp/57c2375f7b.png)
+And thus, Panabsorbium makes its entrance. A strange material that's cold to the touch, it's made of heavy precious metals and is somehow lighter and stronger than both / either of them. Good enough.
 
-Since we've already established that the `.json` file is the heart of our object, let's take a look at it.
+On the inside, we've still got files that have `steel_mail` in their name. Let's change that to our new name, too. Protip: copy+paste works well here, too.
 
-![Stuff below the cutoff isn't implemented as per this tutorial](http://puu.sh/g2z9P/9cb8c2dc11.png)
+![Apply the same logic to the files inside the directory](http://i.imgur.com/MlZe5XA.png)
+
+Since we've already established that the `.json` file is the heart of our object, as far as Stonehearth is concerned, let's take a look at it.
+
+    {
+       "type": "entity",
+       "mixins" : "stonehearth:mixins:item_properties",
+       "components" : {
+          "item" : {
+             "category" : "armor"   
+          },
+          "unit_info" : {
+             "name": "Full Platemail",
+             "description": "A full suit of steel armor",
+             "icon" : "file(steel_mail.png)"         
+          },
+          "model_variants": {
+             "default": {
+                "layer": "clothing",
+                "models": [
+                   "file(steel_mail.qb)"
+                ]
+             },
+             "female" : {
+                "layer": "clothing",
+                "models": [
+                   "file(steel_mail_female.qb)"
+                ]
+             }
+          },
+          "stonehearth:material" : {
+             "tags" : "steel armor heavy_armor"
+          },
+          "stonehearth:entity_forms" : {
+             "iconic_form" : "file(steel_mail_iconic.json)"
+          },
+          "stonehearth:equipment_piece" : {
+             "render_type" : "merge_with_model",
+             "slot" : "torso",
+             "ilevel" : 9,
+             "roles" : "combat",
+             "equip_effect" : "/stonehearth/data/effects/level_up"
+          }
+       },
+       "entity_data" : {
+          "stonehearth:combat:armor_data" : {
+             "base_damage_reduction" : 9
+          },
+          "stonehearth:net_worth" : {
+             "value_in_gold" : 350,
+             "rarity" : "common",
+             "shop_info" : {
+                "buyable" : true,   
+                "sellable" : true,
+                "shopkeeper_level" : 1,
+                "shopkeeper_type" : "caravan"
+             }
+          }
+       }   
+    }
 
 This is the file that's describing our `super_mail` armour. We see that it's in the `armor` category (oh, and pardon my Canadian spelling /late), that it's called a *Full Platemail* ingame, it's got a description, the icon it uses in game, what `.qb` objects render it in 3d, what material it's made of, what it looks like before a Hearthling puts it on, how exactly Stonehearth should put it on the Hearthling, how much armour rating it actually provides our Hearthling, and how much it's worth in gold. Wow, that was a mouthful, wasn't it? Let's change up some of these stats.
 
