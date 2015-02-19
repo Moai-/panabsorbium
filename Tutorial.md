@@ -478,12 +478,218 @@ Start the Microworld again, promote a Hearthling to blacksmith and another to fo
 
 ![also sprach zarathustra in the background intensifies](http://i.imgur.com/3SRzehl.png)
 
+Excellent! Now, to add that air of mystique, let's make our armour also have its very own ingot.
 
+### Adding a custom resource
+
+As with the case of our armor and crafting recipe for it, we will follow the pattern:
+
+ 1. Look at how it was done before
+ 2. Copy an existing example
+ 3. Modify the copy to fit our needs
+
+Let's first find where all the other ingots are.
+
+![Hint: they're here](http://i.imgur.com/sE0M3ru.png)
+
+Like the Karate Kid up-down-up-down with the brush on the house to become a great fighter, so do we copy-paste, copy-paste on our way to being a great modder.
+
+![](http://i.imgur.com/FiBI4Bi.png)
+![](http://i.imgur.com/7ryPOMX.png)
+![](http://i.imgur.com/F7jN9Ip.png)
+
+We take a look inside the `.json`:
+
+    {
+       "mixins": "stonehearth:mixins:item_properties",
+       "type": "entity",
+       "components": {
+          "item": {
+             "material": "gold ingot",
+             "category": "resources",
+             "stacks": 40
+          },
+          "stonehearth:material" : {
+             "tags" : "gold ingot resource"
+          },
+          "model_variants": {
+             "default": {
+                "models": [
+                   "file(gold_ingot.qb)"
+                ]
+             }
+          },
+          "effect_list" : {
+             "effects" : [
+                "stonehearth:effects:treasure_glow"
+             ]  
+          },     
+          "unit_info": {
+             "name": "Gold Ingot",
+             "description": "A bar of pure gold. A suitable material for crafted goods.",
+             "icon" : "file(gold_ingot.png)"
+          }
+       },
+       "entity_data" : {
+          "stonehearth:net_worth" : {
+             "value_in_gold" : 30,
+             "rarity" : "common",
+             "shop_info" : {
+                "buyable" : true,   
+                "sellable" : true,
+                "shopkeeper_level" : 1,
+                "shopkeeper_type" : "caravan"
+             }
+          }
+       }
+    }
+
+Standard fare. We fix our filenames and add new names and description to things. By virtue of having copied the gold bar, we also inherit a nice sparkly glow around our new bars, just like gold bars. This time, I change the `material` and `tags` entries to "panabsorbium" to see if anything will happen. Also, I put in a flavor text, which wasn't there before on the gold bar, as I noticed that in other items, the `name` and `description` fields are accompanied by a `flavor` field. Note, also, that the item is small enough not to require an iconic form.
+
+    {
+       "mixins": "stonehearth:mixins:item_properties",
+       "type": "entity",
+       "components": {
+          "item": {
+             "material": "panabsorbium ingot",
+             "category": "resources",
+             "stacks": 40
+          },
+          "stonehearth:material" : {
+             "tags" : "panabsorbium ingot resource"
+          },
+          "model_variants": {
+             "default": {
+                "models": [
+                   "file(panabsorbium_ingot.qb)"
+                ]
+             }
+          },
+          "effect_list" : {
+             "effects" : [
+                "stonehearth:effects:treasure_glow"
+             ]  
+          },     
+          "unit_info": {
+             "name": "panabsorbium Ingot",
+             "description": "A bar of pure Panabsorbium.",
+             "flavor": "A show of Blacksmithing skill.",
+             "icon" : "file(panabsorbium_ingot.png)"
+          }
+       },
+       "entity_data" : {
+          "stonehearth:net_worth" : {
+             "value_in_gold" : 30,
+             "rarity" : "common",
+             "shop_info" : {
+                "buyable" : true,   
+                "sellable" : true,
+                "shopkeeper_level" : 1,
+                "shopkeeper_type" : "caravan"
+             }
+          }
+       }
+    }
+
+Excellent. Now you can use StoneVox or QC to edit the resource bar `.qb` file, and take a new inventory photo of it as well. When you're done, drop your new files into the `panabsorbium_ingot` directory, overwriting if necessary.
+
+![](http://i.imgur.com/YRzUmQl.png)
+![](http://i.imgur.com/fGpyaaY.png)
+
+And we remember to tell Stonehearth that the bar exists, in `manifest.json`:
+
+    "refined:iron_ingot" : "file(entities/refined/iron_ingot)",
+    "refined:gold_ingot" : "file(entities/refined/gold_ingot)",
+    "refined:silver_ingot" : "file(entities/refined/silver_ingot)",
+    "refined:steel_ingot" : "file(entities/refined/steel_ingot)",
+    
+
+    "refined:iron_ingot" : "file(entities/refined/iron_ingot)",
+    "refined:gold_ingot" : "file(entities/refined/gold_ingot)",
+    "refined:panabsorbium_ingot" : "file(entities/refined/panabsorbium_ingot)",
+    "refined:silver_ingot" : "file(entities/refined/silver_ingot)",
+    "refined:steel_ingot" : "file(entities/refined/steel_ingot)",
+
+Awesome. Let's now change the smithing requirement of our vest to take in one `panabsorbium_ingot`, in `jobs/blacksmith/recipes/panabsorbium_vest_recipe.json`:
+
+    {
+       "type":"recipe",
+       "work_units"  : 5,
+       "recipe_name" : "Panabsorbium Vest",
+       "description" : "Strong but light armour.",
+       "flavor" : "It's cold to the touch.",
+       "portrait"    : "/stonehearth/entities/armor/panabsorbium_vest/panabsorbium_vest.png",
+       "ingredients": [
+          {
+             "uri" : "stonehearth:refined:panabsorbium_ingot",
+             "count" : 1
+          },
+      ],
+      "produces": [
+          {
+             "item":"stonehearth:armor:panabsorbium_vest"
+          }
+      ]
+    }
+ 
+Then we tell the Blacksmith that he can now craft this ingot inside `jobs/blacksmith/recipes/recipes.json`:
+
+    "gold_ingot" : {
+       "recipe" : "file(gold_ingot_recipe.json)"
+    },
+    "panabsorbium_ingot" : {
+       "recipe" : "file(panabsorbium_ingot_recipe.json)"
+    },
+    "steel_ingot" : {
+       "recipe" : "file(steel_ingot_recipe.json)"
+    }
+
+and give him the recipe by making `panabsorbium_ingot_recipe.json` based off a copy of `gold_ingot_recipe.json`:
+
+    {
+       "type":"recipe",
+       "work_units"  : 2,
+       "recipe_name" : "Panabsorbium Ingot",
+       "description": "A bar of pure panabsorbium.",
+       "flavor"      : "A",
+       "portrait"    : "/stonehearth/entities/refined/panabsorbium_ingot/panabsorbium_ingot.png",
+       "level_requirement" : 0,
+       "ingredients": [
+          {
+             "uri" : "stonehearth:refined:gold_ingot",
+             "count" : 1
+          },
+          {
+             "uri" : "stonehearth:refined:silver_ingot",
+             "count" : 1
+          },
+          {
+             "material" : "wood resource",
+             "count" : 1
+       ],
+      "produces": [
+          {
+             "item" : "stonehearth:refined:panabsorbium_ingot"
+          }
+      ]
+    }
+
+A couple things of note here. When we're specifying an ingredient, we can do it one of two ways. Either we ask for a generic "resource", like "wood resource", or "thread resource", or we ask for a very specific item. In the first case, we use `material` to specify what the ingredient is; in the second, we use `uri`.
+
+Make sure your miniworld starts with the materials you need:
+
+    pickup(workers[6], 'stonehearth:footman:wooden_sword_talisman')
+    pickup(workers[2], 'stonehearth:refined:gold_ingot')
+    pickup(workers[3], 'stonehearth:refined:silver_ingot')
+    pickup(workers[4], 'stonehearth:blacksmith:talisman')
+    pickup(workers[1], 'stonehearth:resources:stone:hunk_of_stone')
+
+Now you can go through the whole crafting chain of making a new bar, then a new item out of that bar. Check it out by starting the Microworld.
 
 ### Todo:
 
  * _Making armor craftable_
- * Adding custom resource
+ * _Adding custom resource_
  * Adding buff script to resource
  * Packaging into `.smod`
  * _Reupload images to imgur rather than puush, for permanence_
