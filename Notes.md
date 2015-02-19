@@ -286,9 +286,131 @@ Now go back to the terminal where we opened Microworld seemingly so long ago, an
 
 Yaaay!
 
-... but wait. We're not going to cheat our armour into the game every time, and we're still buried in piles of silver and gold. So let's get to...
+... but wait. We're not going to cheat our armour into the game every time. It's time to think how we'll be...
 
-### Adding a custom resource
+### Making the armour craftable
+
+Pop quiz. Who usually makes armour? No, it's not the worker; no, it's not the shepherd; and no, it's not the cute red fox. You fail Stonehearth. It's actually the Blacksmith. The weaver also makes some, but our armour is going to be based on metals rather than on cute red foxes, so we'll make our Blacksmith make it.
+
+First, some investigation:
+
+![I wonder...](http://i.imgur.com/oQoZqVy.png)
+
+That "recipes" folder is looking awfully alluring for what we're trying to do. Let's take a look-see inside.
+
+![Recipes!](http://i.imgur.com/GVYwfDd.png)
+
+Predictably, here are all of the Blacksmith's recipes. There are two things we'll have to do here; first, we tell the Blacksmith that he can craft our Panabsorbium Vest, and then, we tell him how he can pull it off. Let's take a look at `recipes.json`, where the Blacksmith keeps track of *what* he can do.
+
+Among the other recipes, we see the section that interests us, the armour:
+
+    "armor" : {
+       "ordinal" : 12, 
+       "name" : "Armor",
+       "recipes" : {
+          "bronze_breastplate" : {
+             "recipe" : "file(bronze_breastplate_recipe.json)"
+          },
+          "iron_mail" : {
+             "recipe" : "file(iron_mail_recipe.json)"
+          },
+          "steel_mail" : {
+             "recipe" : "file(steel_mail_recipe.json)"
+          },
+          "basic_shield" : {
+             "recipe" : "file(basic_shield_recipe.json)"
+          }            
+       }
+    }
+ 
+ I mean. You should know the trick by now, right?
+ 
+    "recipes" : {
+       "bronze_breastplate" : {
+          "recipe" : "file(bronze_breastplate_recipe.json)"
+       },
+       "iron_mail" : {
+          "recipe" : "file(iron_mail_recipe.json)"
+       },
+       "panabsorbium_vest" : {
+         "recipe" : "file(panabsorbium_vest_recipe.json"
+       },
+       "steel_mail" : {
+          "recipe" : "file(steel_mail_recipe.json)"
+       },
+       "basic_shield" : {
+          "recipe" : "file(basic_shield_recipe.json)"
+       }            
+    }
+ 
+The Blacksmith now knows that there's this thing called a `panabsorbium_vest` that he can apparently craft, but he doesn't actually have a clue how he can do it. He has all these other recipes, but `panabsorbium_vest_recipe.json` doesn't exist, thus he calls us liars and errors out. Let's create it, using our favourite modding trick!
+
+![here we go again](http://i.imgur.com/uXBzE7n.png)
+![and here we are](http://i.imgur.com/XyOfwaH.png)
+
+Popping open the hood, we see...
+
+    {
+       "type":"recipe",
+      
+       "work_units"  : 5,
+       "recipe_name" : "Full Platemail",
+       "description" : "A full suit of heavy, durable steel armor.",
+       "flavor" : "Full Metal Jacket",
+       "portrait"    : "/stonehearth/entities/armor/steel_mail/steel_mail.png",
+       "level_requirement" : 4,
+       
+       "ingredients": [
+          {
+             "uri" : "stonehearth:refined:steel_ingot",
+             "count" : 4
+          },
+          {
+             "material" : "leather resource",
+             "count" : 1
+          },
+          {
+             "material" : "thread resource",
+             "count" : 1
+          }
+      ],
+      "produces": [
+          {
+             "item":"stonehearth:armor:steel_mail"
+          }
+      ]
+    }
+
+If you've been paying attention, or if you haven't been and are just naturally clever, most of this should seem familiar to you. This is an entity just like our armour that we made previously. It may not have a "physical" form, like the armour did in the shape of `.qb` files, but it's still very much an entity that may be displayed in the game's various menus. Thus, the two old fields `name` and `description` pop up, which can be safely copy-pasted into. Some items worth going over:
+
+ * `work_units`: This is the number of animations the Hearthling will make at his or her workbench after gathering all required items and before removing the finished item. It would follow that small tasks like ingots take only a couple work units, while larger tasks like creating a physically impossible armour might take more: say, 8.
+ * `flavour`: Not all items have a flavour text, but it seems that many which don't are nevertheless capable of having it, as we'll see later with the ingot. I filled this bit in for fun, but you don't have to.
+ 
+Here's the finished recipe. Let's make it work with just existing bars for now.
+ 
+     {
+        "type":"recipe",
+        "work_units"  : 5,
+        "recipe_name" : "Panabsorbium Vest",
+        "description" : "It's cold to the touch",
+        "flavor" : "Strong but light armor",
+        "portrait"    : "/stonehearth/entities/armor/panabsorbium_vest/panabsorbium_vest.png",
+        "ingredients": [
+           {
+              "uri" : "stonehearth:refined:silver_ingot",
+              "count" : 1
+           },
+           {
+             "uri" : "stonehearth:refined:gold_ingot",
+             "count" : 1
+           }
+       ],
+       "produces": [
+           {
+              "item":"stonehearth:armor:panabsorbium_vest"
+           }
+       ]
+     }
 
 
 ### Todo:
