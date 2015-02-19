@@ -235,7 +235,7 @@ Add some modifications to it. Feel free to be as creative as you like.
 
 Some tips: use the paintbrush icon to paint voxels, use the pencil to add voxels to the model. Don't forget to change matrices -- think "moving parts" or "components" of a model -- when you want to edit different parts of the body. The `<<` button in the middle right opens up the matrix menu. The iconic model doesn't have these, as it doesn't have any animated parts. Hold right mouse to rotate around the model, scroll through the scrollwheel to zoom in or out, and hold middle mouse to pan in any direction. When you're done, take a snapshot of your armour (just the male/default one) using the photo camera icon on the lower right (we'll use this for our in-game icon of your armour), then press the floppy disk icon in the lower middle-right to export the file as a `.qb` file. You will find both the `.png` file and the `.qb` file in the directory where you put StoneVox:
 
-![There's Waldo](http://imgur.com/OsONwVN)
+![There's Waldo](http://i.imgur.com/OsONwVN.png)
 
 Grab them from that folder, and put them back into `stonehearth/entities/armor/panabsorbium_vest`. For posterity, here's what I ended up with:
 
