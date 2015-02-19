@@ -2,7 +2,15 @@
 
 If you want to take the long route and put this mod together yourself, you're in the right place. Some blind poking around may take place, as this tutorial roughly mirrors my own experience writing this mod.
 
-So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth entered Alpha. Because we don't have a scientific education or imagination, we'll go ahead and make a suit of armor out of them.
+Stonehearth was designed to be a mod-friendly game. Everything we do here can be accomplished with nothing more than renaming and copy-pasting certain things. If you are afraid to start because you don't know how to code, don't let that stop you. Most of what we'll be doing here is re-naming and copy-pasting configuration files rather than code.
+
+As of this writing (February 2015), Stonehearth is in Alpha 8. I will try to keep this tutorial up to date as new updates roll out and key files undergo change. As such, I will keep this tutorial simple and limited in scope, large enough to get you started on modding, and small enough to be updated easily. Our objectives are as follow:
+ * Add new armor to the game
+ * Make the new armor craftable in-game
+ * Add a new ingot to craft your armor with
+ * Give the armor a buff to make it extra special
+
+It's Alpha 8 and one can hardly kick a rock on a mountain without tripping on a glistening chunk of gold ore. So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth entered Alpha. Because we don't have a scientific education, we decide that the best use for surplus bullion is making it into a suit of armor.
 
 ### Tools and Setup
 
@@ -20,9 +28,13 @@ I like to keep my tools close to where I use them, so I create a folder called "
 
 Once I have `microworld.smod`, I drop it into my `mods` folder. Notepad++ is fairly easy to install on Windows. Yours won't look exactly like mine, but the idea should be similar enough. To run StoneVox, I run `run.bat` in its folder; to run Lua Unminifier, I run `LuaUnminifier.exe` in its folder.
 
-Ok, got all the tools? Great.
+StoneVox is an open-source `.qb` editor, which we will use to modify in-game assets. You can, of course, also create new ones from scratch, but I have the artistic gift of a mindless null and the heart of a modder, so I let my Ctrl+C and Ctrl+V do the talking. 
 
-First, I make a `mods_bup` directory inside Stonehearth's root directory , into which I copy (backup) the contents of the `mods` folder. We'll be messing with Stonehearth's data, so we want to keep the originals handy in case if we explode something.
+LuaUnminifier is not essential for this mod, but I use it anyway for its capability to render minified Lua in a readable format, and for its convenient "search entire project" function. Although coding skills aren't essential for modding in general or this specific tutorial, the ability to debug an error will always come in handy when working with computers. Stonehearth is good about providing informative errors, so if you see that the game is complaining about not being able to find `some_item`, you do a search for `some_item` in the project, and realize you forgot to add `some_item.json` to the folder where it was supposed to be.
+
+Ok, got all the tools? Great. **If you skipped the previous part, begin again here.**
+
+First, I make a `mods_bup` directory inside Stonehearth's root directory, into which I copy (backup) the contents of the `mods` folder. We'll be messing with Stonehearth's data, so we want to keep the originals handy in case if we explode something.
 
 ![Don't look at my tautological folder structure *hides*](http://i.imgur.com/C8BPodN.png)
 
@@ -32,7 +44,11 @@ Next, I open up `stonehearth.smod` inside the `mods` directory, extract it, and 
 
 We do this in order to be able to quickly modify Stonehearth and then test our modifications in the same breath. Otherwise we'd have to unzip the smod, make our changes, and zip it back up. Stonehearth reads both `.smod` files and simple directories, so we use that to our advantage.
 
-Finally, we launch Stonehearth with the Microworld mod. To do this, I navigate to my root Stonehearth directory, and open a command window there. I type in the following incantation to summon up an instance of our Microworld:
+*Note*: I use LuaUnminifier to browse and view my backup copy of Stonehearth's data: `Stonehearth/mods_bup/stonehearth.smod`, but whenever I modify a file, I do it through Notepad++ inside the unpacked mod folder, like: `Stonehearth/mods/stonehearth/entities/armor/leather_vest/leather_vest.json`. Yes, that does mean that the two copies will be out of sync eventually, and yes, this would be a terrible idea to do in a larger mod; however, as soon as we learn how to package our mod into a `.smod` file, it won't matter; we will no longer be modifying Stonehearth's files directly.
+
+Finally, we launch Stonehearth with the Microworld mod. Microworld is, as the name suggests, a tiny world which is generated according to strict parameters that we can change around at will. This means that when we need to test an item that wouldn't normally be available until later in the game, we can just code it in to drop at our settlers' feet in the Microworld as the game starts. Very useful, yes? Let's start it up.
+
+To do this, I navigate to my root Stonehearth directory, and open a command window there. I type in the following incantation to summon up an instance of our Microworld:
 
 ![Stonehearth.exe --game.main_mod=microworld](http://i.imgur.com/COJj3Yl.png)
 
@@ -44,17 +60,19 @@ If you've opened it, great. You've seen how fast it is to load, and how it skips
 
 ### Adding armor
 
-As a modder, Ctrl+C is my shield, Ctrl+V is my sword. We'll be using these quite a lot here, and thankfully modding Stonehearth is pretty much limited to that until you want to do some really serious stuff with Lua (and even then, I imagine, those two will be your duct tape and WD-40 a great deal of time). First, let's take a look as to what existing armor looks like.
+As a modder, Ctrl+C is my shield, Ctrl+V is my sword. As I've alluded to before, we'll be using these quite a lot here, and thankfully modding Stonehearth is pretty much limited to that until you want to do some really serious stuff with Lua. Even then, I imagine, those two will be your duct tape and WD-40 a great deal of time. To get some background, let's take a look as to what existing armor looks like.
 
-Using Lua Unminifier, open `stonehearth.smod` inside your `mods_bup` directory. As far as I know, Lua Unminifier doesn't write to files inside `.smod`s, so we're safe using it just as a good way to navigate and search the game's files. 
+Using Lua Unminifier, open `stonehearth.smod` inside your `mods_bup` directory.
 
 ![It should look like this](http://i.imgur.com/5aztqWf.png)
 
-Take a minute to open up Stonehearth and browse through its file directory. Many things are in directories that make sense, such as all of our armors being inside `entities/armor`, all blacksmith recipes being in `jobs/blacksmith/recipes`, and so on. So let's pop open `steel_mail`:
+Take a minute to explore Stonehearth and browse through its file directory. Many things are in directories that make sense, such as all of our armors being inside `entities/armor`, all blacksmith recipes being in `jobs/blacksmith/recipes`, and so on. It's like the Matrix, or staring at the wall while in the washroom: look long enough and patterns start to show up. You'll see labelled values, numbers, assets, etc that correspond to in-game objects. Changing them here changes them in-game, through dark magic. 
+
+We're making an armor, and we need a place to start. So let's pop open `steel_mail`:
 
 ![The atoms of a Stonehearth steel mail](http://i.imgur.com/chVBZsd.png)
 
-Stonehearth defines entities -- "things", like trees, clothing, resources, sheep, Hearthlings, etc -- inside `.json` files. All the information for a particular entity that Stonehearth needs is either located or referenced inside that main `.json` file with the same name as the armor. What does a `.json` file for `steel_mail` look like, you ask? Well, you'll have to open the file and look yourself, if you're so curious. I'm here to add armor! I imagine my armor will be no less strong than steel mail, so I'll give my mighty Copy/Paste sword a swing:
+Stonehearth defines entities -- "things", like trees, clothing, resources, sheep, Hearthlings, etc -- inside `.json` files. All the information for a particular entity that Stonehearth needs is either located or referenced inside that main `.json` file with the same name as the entity: things like its in-game name, what picture it uses to represent itself, what model it's rendered as in the world, what effects it has, and so on. What does a `.json` file for `steel_mail` look like, you ask? Well, you'll have to open the file and look yourself, if you're so curious. I'm here to add armor! I switch to my `mods` directory, so I can edit it. I imagine my armor will be no less strong than steel mail, so I'll give my mighty Copy/Paste sword a swing:
 
 ![Whoosh](http://i.imgur.com/2eRReno.png)
 
@@ -64,7 +82,7 @@ Well... okay. We don't want it to be JUST like steel mail, we want it to be *bet
 
 And thus, Panabsorbium makes its entrance. A strange material that's cold to the touch, it's made of heavy precious metals and is somehow lighter and stronger than both / either of them. Good enough.
 
-On the inside, we've still got files that have `steel_mail` in their name. Let's change that to our new name, too. Protip: copy+paste works well here, too.
+On the inside, we've still got files that have `steel_mail` in their name. Let's change that to our new name as well. Protip: copy+paste works well here, too.
 
 ![Apply the same logic to the files inside the directory](http://i.imgur.com/MlZe5XA.png)
 
@@ -127,9 +145,9 @@ Since we've already established that the `.json` file is the heart of our object
        }   
     }
 
-Well, it may look like a lot, but it really isn't. When you see something in the code that you don't know about, leave it alone, and only poke it if it starts causing problems. Having said that, here are some of the fields that might interest us:
+Well, it may look like a lot, but it really isn't. When you see something in the code that you don't know about, leave it alone, and only poke it if it starts causing problems (or if you've got a safe backup). Otherwise, your poking will be the very thing that causes those problems. Having said that, here are some of the fields that might interest us:
 
-(note: if you're unfamiliar with JSON, `unit_info.name` is referring to the `name` property inside the `unit_info`'s braces)
+*Note*: if you're unfamiliar with JSON, `unit_info.name` is referring to the `name` property inside the `unit_info`'s braces.
 
  * `unit_info.name`: The in-game name of this entity.
  * `unit_info.description`: The description seen on the entity.
@@ -138,7 +156,7 @@ Well, it may look like a lot, but it really isn't. When you see something in the
  * `stonehearth:entity_forms.iconic_form`: This is the QB file that will represent the iconic form of your armor.*
  * `entity_data.stonehearth:combat:armor_data.base_damage_reduction`: What a mouthful, thankfully pretty self-explanatory. It determines how effective your armor is at stopping damage dealt to the Hearthling.
  
-*Think stockpiles: a piece of armor looks way different when it's stored in a stockpile (or carried by a Hearthling as an item) versus when it's being worn by a Hearthling. As far as Stonehearth is concerned, these are two separate objects! They turn into one another depending on the in-game circumstances.
+*Think stockpiles: a piece of armor looks way different when it's stored in a stockpile (or carried by a Hearthling as an item) versus when it's being worn by a Hearthling. A piece of furniture looks different if it's in a stockpile/being carried, versus when it's placed. As far as Stonehearth is concerned, these are separate objects! They turn into one another depending on the in-game circumstances, like "I was worn" or "I was undeployed".
 
 Let's change some of these around. You've probably noticed file references that look like this: `"icon" : "file(steel_mail.png)"`. This refers to the file called `steel_mail.png` in the same directory as this `.json` file. We have no such thing in this folder; we have one called `panabsorbium_vest.png` now. Let's change this and all other file references accordingly:
 
@@ -184,7 +202,7 @@ The JSON-ish "heart" of the armor is now configured. The armor is now cheesy, an
        }
     }
 
-Since the iconic form can't be equipped, there are no combat stats here of any sort. Instead, we've got the name and description, which we can fill from the previous file with copy/paste, and some broken file references. Fixing these, we get:
+Since the iconic form can't be equipped, there are no combat stats here of any sort. Instead, we've got the name and description, which we can fill from the previous file with copy/paste, and some broken file references. We won't touch the placement information in `mob`, and I'm ignoring all `stonehearth:material` tags because I personally don't know what impact it will have on the game. Fixing the known issues, then, we get:
 
     {
        "mixins": "stonehearth:mixins:item_properties",
@@ -217,7 +235,7 @@ Let's save our work and close out, then open our StoneVox editor. Make sure not 
 
 ![Our mail](http://i.imgur.com/Z8hxB5J.png)
 
-There's the old Steel Mail qb file. Although pretty, as of this writing (Stonehearth in Alpha 9), the helmet does not render on Hearthlings properly. So, rather than using the Steel Mail as a template for our armor, let's look around. Note: again, as of this writing, StoneVox gets grumpy when you try to load more than one file per program execution. Before loading more `.qb` files, close the program, then execute `run.bat` again.
+There's the old Steel Mail qb file. Although pretty, as of this writing (Stonehearth in Alpha 8), the helmet does not render on Hearthlings properly. So, rather than using the Steel Mail as a template for our armor, let's look around. Note: again, as of this writing, StoneVox gets grumpy when you try to load more than one file per program execution. Before loading more `.qb` files, close the program, then execute `run.bat` again.
 
 After looking around, I've decided to settle on `leather_vest.qb` as a template for my male/default armor, from the `leather_vest` folder...
 
@@ -231,9 +249,9 @@ Let's not forget about the iconic file, too, which I'll steal once again from `c
 
 ![And again](http://i.imgur.com/dgywvcH.png)
 
-Add some modifications to it. Feel free to be as creative as you like. 
+Add some modifications to each one. Feel free to be as creative as you like. 
 
-Some tips: use the paintbrush icon to paint voxels, use the pencil to add voxels to the model. Don't forget to change matrices -- think "moving parts" or "components" of a model -- when you want to edit different parts of the body. The `<<` button in the middle right opens up the matrix menu. The iconic model doesn't have these, as it doesn't have any animated parts. Hold right mouse to rotate around the model, scroll through the scrollwheel to zoom in or out, and hold middle mouse to pan in any direction. When you're done, take a snapshot of your armor (just the male/default one) using the photo camera icon on the lower right (we'll use this for our in-game icon of your armor), then press the floppy disk icon in the lower middle-right to export the file as a `.qb` file. You will find both the `.png` file and the `.qb` file in the directory where you put StoneVox:
+Some tips: use the paintbrush icon to paint voxels, use the pencil to add voxels to the model. Don't forget to change matrices -- think "moving parts" or "components" of a model -- when you want to edit different parts of the body. The `<<` button in the middle right opens up the matrix menu. The iconic model doesn't have these, as it doesn't have any animated parts. Hold right mouse to rotate around the model, scroll through the scrollwheel to zoom in or out, and hold middle mouse to pan in any direction. When you're done, take a snapshot of your armor (just the male/default one) using the photo camera icon on the lower right (we'll use this for our in-game icon of your armor), then press the floppy disk icon in the lower middle-right to export the file as a `.qb` file. You will find both the `.png` file and the `.qb` file in the directory where you put StoneVox, inside the `export` folder:
 
 ![There's Waldo](http://i.imgur.com/OsONwVN.png)
 
@@ -245,14 +263,14 @@ And the icon...
 
 ![Red and white, boros represent](http://i.imgur.com/HTua2kR.png)
 
-Okay. So now we've got our `panabsorbium_vest`, the item. The only thing we need to do now is to tell Stonehearth that it exists. Stonehearth's main reference for all the entities it has access to is the `manifest.json` file. It associates in-code references with on-disk file assets, such as everything we've created for our Super Mail thus far. Clearly, it had to have associated steel mail with its resources at some point. We remember that steel mail was referred to in code as `steel_mail`. So let's open up `manifest.json` and do a search for `steel_mail`:
+Okay. So now we've got our `panabsorbium_vest`, the item. The only thing we need to do now is to tell Stonehearth that it exists. Stonehearth's main reference for all the entities it has access to is the `manifest.json` file, found in `Stonehearth/mods/stonehearth`. It associates in-code references with on-disk file assets, such as everything we've created for our Panabsorbium Vest thus far. Since steel mail works as an armor, `manifest.json` had to have associated steel mail with its resources at some point. We remember that steel mail was referred to in code as `steel_mail`. So let's open up `manifest.json` and do a search for `steel_mail`:
 
     "armor:iron_mail" : "file(entities/armor/iron_mail)",
     "armor:steel_mail" : "file(entities/armor/steel_mail)",
     "armor:wooden_shield" : "file(entities/armor/wooden_shield)",
     "armor:basic_shield" : "file(entities/armor/basic_shield)",
 
-Among other things, we see how `steel_mail` was exposed to Stonehearth. Let's plagiarize! A copy here, a paste there, a fix hither, a hack yonder, and we end up with:
+Among other things, we see how `steel_mail` was exposed to Stonehearth. Let's plagiarize! A copy here, a paste there, a fix hither, a hack yonder, and we end up with a new line:
 
     "armor:iron_mail" : "file(entities/armor/iron_mail)",
     "armor:steel_mail" : "file(entities/armor/steel_mail)",
@@ -271,16 +289,18 @@ Let's open up `mods/microworld/worlds/mini_game_world.lua` -- the file that's re
     pickup(workers[3], 'stonehearth:trapper:talisman')
     pickup(workers[4], 'stonehearth:carpenter:talisman')
  
-Interesting. Code that's apparently referencing items to give to our workers, and *somehow*, whenever we launch the Microworld, *those workers start with those exact items!* It must be a lucky coincidence! Let's exploit it. We want to give our workers the armor and a wooden sword to get promoted with quickly. Remember how we declared our armor in `manifest.json`? This is where we use that declaration in-game:
+Interesting. Code that's apparently referencing items to give to our workers, and *somehow*, whenever we launch the Microworld, *those workers start with those exact items!* It must be a lucky coincidence! Let's exploit it. We want to give our workers the armor and a wooden sword to get promoted with quickly:
 
     pickup(workers[6], 'stonehearth:armor:panabsorbium_armor')
     pickup(workers[2], 'stonehearth:footman:wooden_sword_talisman')
     pickup(workers[3], 'stonehearth:trapper:talisman')
     pickup(workers[4], 'stonehearth:carpenter:talisman')
 
+Remember how we declared our armor in `stonehearth/manifest.json`? This means that the package called `panabsorbium_armor` belongs to the mod called `stonehearth`. We treat it as such in this lua file as well, hence the `stonehearth:` in front.
+
 (P. S. I know I'm doing it extremely wrong, I should be giving them the iconic version, but I really don't know how to do that yet :x)
 
-Now go back to the terminal where we opened Microworld seemingly so long ago, and press the Up Arrow key to re-type the secret incantation. Once inside the Microworld, create a stockpile, promote a Hearthling to a footman. After the armor gets dropped (and turns into its iconic version), then placed into the stockpile, watch your footman equip the suit of armor:
+Now go back to the terminal where we opened Microworldo, and press the Up Arrow key to re-type the secret incantation. Once inside the Microworld, create a stockpile, promote a Hearthling to a footman. After the armor gets dropped (and turns into its iconic version), then placed into the stockpile, watch your footman equip the suit of armor:
 
 ![Can you see the greenness of envy in Leah's eyes as she gazes upon Orsa's new Panabsorbium bling?](http://i.imgur.com/pguh9Tg.png)
 
@@ -292,7 +312,7 @@ Yaaay!
 
 Pop quiz. Who usually makes armor? No, it's not the worker; no, it's not the shepherd; and no, it's not the cute red fox. You fail Stonehearth. It's actually the Blacksmith. The weaver also makes some, but our armor is going to be based on metals rather than on cute red foxes, so we'll make our Blacksmith make it.
 
-First, some investigation:
+First, some investigation reveals the existence of a `/jobs/blacksmith`:
 
 ![I wonder...](http://i.imgur.com/oQoZqVy.png)
 
@@ -335,6 +355,30 @@ We use the ancient modders' technique:
           "iron_mail" : {
              "recipe" : "file(iron_mail_recipe.json)"
           },
+          "steel_mail" : {
+             "recipe" : "file(steel_mail_recipe.json)"
+          },
+          "steel_mail" : {
+             "recipe" : "file(steel_mail_recipe.json)"
+          },
+          "basic_shield" : {
+             "recipe" : "file(basic_shield_recipe.json)"
+          }            
+       }
+    }
+ 
+...
+
+    "armor" : {
+       "ordinal" : 12, 
+       "name" : "Armor",
+       "recipes" : {
+          "bronze_breastplate" : {
+             "recipe" : "file(bronze_breastplate_recipe.json)"
+          },
+          "iron_mail" : {
+             "recipe" : "file(iron_mail_recipe.json)"
+          },
           "panabsorbium_vest" : {
             "recipe" : "file(panabsorbium_vest_recipe.json)"
           },
@@ -346,6 +390,8 @@ We use the ancient modders' technique:
           }            
        }
     }
+
+*Note*: if your game starts exploding because you can't open a JSON file, try copy+pasting the problematic file's contents  [here](http://jsonlint.com/) and seeing if it comes up with any issues. 
 
 The Blacksmith now knows that there's this thing called a `panabsorbium_vest` that he can apparently craft, but he doesn't actually have a clue how he can do it. He has all these other recipes, but `panabsorbium_vest_recipe.json` doesn't exist, thus he calls us liars and errors out. Let's create it, using our favourite modding trick!
 
@@ -389,7 +435,7 @@ Most of this should seem familiar to you. This is an entity just like our armor 
 
  * `work_units`: This is the number of animations the Hearthling will make at his or her workbench after gathering all required items and before removing the finished item. It would follow that small tasks like ingots take only a couple work units, while larger tasks like creating a physically impossible armor might take more: say, 8.
  * `flavour`: Not all items have a flavour text, but it seems that many which don't are nevertheless capable of having it, as we'll see later with the ingot. I filled this bit in for fun, but you don't have to. Anyway, to avoid confusion, I would recommend putting the same name and description for the item across all instances of the same item.
- * `level_requirement`: For this armor, I'd set this to 5. However, since getting a Blacksmith to level 5 in a quick game is difficult, we instead remove the level requirement while we're testing. This means the armour can be made by a freshly promoted novice.
+ * `level_requirement`: For this armor, I'd set this to 5. However, since getting a Blacksmith to level 5 in a quick game is difficult, we instead remove the level requirement while we're testing. This means the armor can be made by a freshly promoted novice.
  
 Here's the finished recipe. Let's make it work with just existing bars for now, and only use one of each for testing. Once we've got our blacksmith smithing the thing, we can change the requirements.
 
@@ -420,7 +466,7 @@ Here's the finished recipe. Let's make it work with just existing bars for now, 
 
 Looks good! Now let's test it.
 
-Give our workers a Blacksmith's Hammer, the two bars, a rock (to build the workshop), and a wooden sword. Searching through the `manifest.json` file gives us some item names to put into our `mini_game_world.lua`:
+Give our workers a Blacksmith's Hammer, the two bars, a rock (to build the workshop), and a wooden sword. Remember that we're asking the `stonehearth` mod, in the game's language, for some packages. All things belonging to the `stonehearth` mod are inside its `manifest.json`. Searching through the `manifest.json` file gives us the item names to put into our `mini_game_world.lua`, prefixed with the "mod" they're coming from:
 
     pickup(workers[6], 'stonehearth:footman:wooden_sword_talisman')
     pickup(workers[2], 'stonehearth:refined:gold_ingot')
