@@ -266,23 +266,30 @@ Great. On paper, at least. What's the motivation for doing all this if you can't
 
 Let's open up `mods/microworld/worlds/mini_game_world.lua` -- the file that's responsible for populating our microworld whenever we launch it -- and look near the bottom:
 
-![Ooooh](http://puu.sh/g2F64/964d56dcac.png)
+    pickup(workers[6], 'stonehearth:resources:wood:oak_log')
+    pickup(workers[2], 'stonehearth:resources:fiber:silkweed_bundle')
+    pickup(workers[3], 'stonehearth:trapper:talisman')
+    pickup(workers[4], 'stonehearth:carpenter:talisman')
+ 
+Interesting. Code that's apparently referencing items to give to our workers, and *somehow*, whenever we launch the Microworld, *those workers start with those exact items!* It must be a lucky coincidence! Let's exploit it. We want to give our workers the armour and a wooden sword to get promoted with quickly. Remember how we declared our armour in `manifest.json`? This is where we use that declaration in-game:
 
-It looks like the world automatically gives our hearthlings some items. Let's give one of the hearthlings the armour that we generated, as well as a wooden sword to promote them to soldier:
-
-![Terrible code is terrible](http://puu.sh/g2Fy8/4707c2eeba.png)
+    pickup(workers[6], 'stonehearth:armor:panabsorbium_armor')
+    pickup(workers[2], 'stonehearth:footman:wooden_sword_talisman')
+    pickup(workers[3], 'stonehearth:trapper:talisman')
+    pickup(workers[4], 'stonehearth:carpenter:talisman')
 
 (P. S. I know I'm doing it extremely wrong, I should be giving them the iconic version, but I really don't know how to do that yet :x)
 
-Now go back to the terminal, and press the Up Arrow key to re-type the secret incantation (I may have used it more than once):
+Now go back to the terminal where we opened Microworld seemingly so long ago, and press the Up Arrow key to re-type the secret incantation. Once inside the Microworld, create a stockpile, promote a Hearthling to a footman. After the armour gets dropped (and turns into its iconic version), then placed into the stockpile, watch your footman equip the suit of armour:
 
-![spamspamspam](http://puu.sh/g2FNd/e72921682e.png)
-
-Once inside the Microworld, create a stockpile, promote a Hearthling (in my case, it has to be a male, as I've only modified the male Steel Mail) to a footman. After the armour gets dropped (and turns into its iconic version), then placed into the stockpile, watch your footman equip the suit of armour (as of this testing, helmets were malfunctioning):
-
-![I CURSE THE GODS THAT ALLOWED ME TO EXIST](http://puu.sh/g2G22/c0d9df1bc2.jpg)
+![Can you see the greenness of envy in Leah's eyes as she gazes upon Orsa's new Panabsorbium bling?](http://i.imgur.com/pguh9Tg.png)
 
 Yaaay!
+
+... but wait. We're not going to cheat our armour into the game every time, and we're still buried in piles of silver and gold. So let's get to...
+
+### Adding a custom resource
+
 
 ### Todo:
 
