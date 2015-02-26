@@ -720,9 +720,9 @@ This is your basic mod declaration, which serves much the same purpose as Stoneh
 
 Next, we'll have to drop our assets into this folder, too. Personally, I like to recreate the folder structure inside Stonehearth for consistency, so I create three directories:
 
-`entities/armor/panabsorbium_vest`
-`entities/refined/panabsorbium_ingot`
-`jobs/blacksmith/recipes`
+`entities/armor/panabsorbium_vest`  
+`entities/refined/panabsorbium_ingot`  
+`jobs/blacksmith/recipes`  
 
 These are the four places where we've been either adding or modifying things (not including `manifest.json`, since we have our own one now) inside the main `mods/stonehearth` directory. To leave the main mod clean, let's **cut** the contents of those folders from `mods/stonehearth`, and replace them into `mods/panabsorbium`:
 
