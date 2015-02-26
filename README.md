@@ -26,5 +26,6 @@ This mod was written by me, [@Moai](http://discourse.stonehearth.net/users/moai)
 
 Clone this repository into your `Stonehearth/mods` directory.
 
-## More
-If you're a beginner to modding like myself, you might want to check out the [Notes.md](https://github.com/Moai-/panabsorbium/blob/master/Notes.md) file included with this mod, which documents some of what I've learned while making this mod, as well as a handy reference if you want to mess with this armour yourself. If you're a pro, you can still check it out and let me know if I'm incorrect / missed something.
+**OR**
+
+Follow [the tutorial](https://github.com/Moai-/panabsorbium/blob/master/Tutorial.md) to build this mod from scratch yourself.
