@@ -15,6 +15,10 @@
       {
          "uri" : "stonehearth:refined:silver_ingot",
          "count" : 4
+      },
+      {
+         "material" : "wood resource",
+         "count" : 1
       }
    ],
   "produces": [

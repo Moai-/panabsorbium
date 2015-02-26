@@ -6,6 +6,7 @@
    "description" : "Strong but light armour.",
    "flavor" : "It's cold to the touch.",
    "portrait"    : "/panabsorbium/entities/armor/panabsorbium_vest/panabsorbium_vest.png",
+   "level_requirement" : 5,
 
    "ingredients": [
       {
