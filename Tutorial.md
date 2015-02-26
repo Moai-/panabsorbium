@@ -6,7 +6,6 @@ As of this writing (February 2015), Stonehearth is in Alpha 8. I will try to kee
  * Add new armor to the game
  * Make the new armor craftable in-game
  * Add a new ingot to craft your armor with
- * Give the armor a buff to make it extra special
 
 It's Alpha 8 and one can hardly kick a rock on a mountain without tripping on a glistening chunk of gold ore. So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth entered Alpha. For some reason, we decide that the best use for surplus bullion is making it into a suit of armor.
 
