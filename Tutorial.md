@@ -10,7 +10,12 @@ As of this writing (February 2015), Stonehearth is in Alpha 8. I will try to kee
  * Add a new ingot to craft your armor with
  * Give the armor a buff to make it extra special
 
-It's Alpha 8 and one can hardly kick a rock on a mountain without tripping on a glistening chunk of gold ore. So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth entered Alpha. Because we don't have a scientific education, we decide that the best use for surplus bullion is making it into a suit of armor.
+It's Alpha 8 and one can hardly kick a rock on a mountain without tripping on a glistening chunk of gold ore. So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth entered Alpha. For some reason, we decide that the best use for surplus bullion is making it into a suit of armor.
+
+### Compatibility
+Compatible as of **[dev2193]**  
+Last updated on **February 26, 2015**  
+View finished mod at https://github.com/Moai-/panabsorbium/
 
 ### Tools and Setup
 
@@ -26,7 +31,9 @@ I like to keep my tools close to where I use them, so I create a folder called "
 
 ![Thusly](http://i.imgur.com/jNUxF5X.png)
 
-Once I have `microworld.smod`, I drop it into my `mods` folder. Notepad++ is fairly easy to install on Windows. Yours won't look exactly like mine, but the idea should be similar enough. To run StoneVox, I run `run.bat` in its folder; to run Lua Unminifier, I run `LuaUnminifier.exe` in its folder.
+Yours won't look exactly like mine, but the idea should be similar enough. To run StoneVox, I run `run.bat` in its folder; to run Lua Unminifier, I run `LuaUnminifier.exe` in its folder.
+
+ Once I have `microworld.smod`, I drop it into my `mods` folder. Notepad++ is fairly easy to install on Windows.
 
 StoneVox is an open-source `.qb` editor, which we will use to modify in-game assets. You can, of course, also create new ones from scratch, but I have the artistic gift of a mindless null and the heart of a modder, so I let my Ctrl+C and Ctrl+V do the talking. 
 
@@ -48,7 +55,11 @@ We do this in order to be able to quickly modify Stonehearth and then test our m
 
 Finally, we launch Stonehearth with the Microworld mod. Microworld is, as the name suggests, a tiny world which is generated according to strict parameters that we can change around at will. This means that when we need to test an item that wouldn't normally be available until later in the game, we can just code it in to drop at our settlers' feet in the Microworld as the game starts. Very useful, yes? Let's start it up.
 
-To do this, I navigate to my root Stonehearth directory, and open a command window there. I type in the following incantation to summon up an instance of our Microworld:
+To do this, I navigate to my root Stonehearth directory, and open a command window there (shift+click anywhere in the explorer window, but not on any one file).
+
+![Or just do Windows button+R, then cd "your stonehearth directory"](http://i.imgur.com/vjaJMhH.png)
+
+I type in the following incantation to summon an instance of our Microworld:
 
 ![Stonehearth.exe --game.main_mod=microworld](http://i.imgur.com/COJj3Yl.png)
 
@@ -298,7 +309,7 @@ Interesting. Code that's apparently referencing items to give to our workers, an
 
 Remember how we declared our armor in `stonehearth/manifest.json`? This means that the package called `panabsorbium_armor` belongs to the mod called `stonehearth`. We treat it as such in this lua file as well, hence the `stonehearth:` in front.
 
-(P. S. I know I'm doing it extremely wrong, I should be giving them the iconic version, but I really don't know how to do that yet :x)
+(TODO: Make it drop the iconic version rather than full-sized)
 
 Now go back to the terminal where we opened Microworldo, and press the Up Arrow key to re-type the secret incantation. Once inside the Microworld, create a stockpile, promote a Hearthling to a footman. After the armor gets dropped (and turns into its iconic version), then placed into the stockpile, watch your footman equip the suit of armor:
 
@@ -686,13 +697,114 @@ Make sure your miniworld starts with the materials you need:
 
 Now you can go through the whole crafting chain of making a new bar, then a new item out of that bar. Check it out by starting the Microworld.
 
-### Todo:
+### Packaging into `.smod`
 
- * _Making armor craftable_
- * _Adding custom resource_
- * Adding buff script to resource
- * Packaging into `.smod`
- * _Reupload images to imgur rather than puush, for permanence_
- * Let me know if you want me to write the rest
+So now we have added a craftable asset into the game. We are, however, doing it a bit of a dirty way: we're directly modifying Stonehearth's code. This can have a number of undesirable effects, such as all your changes being gone with the next update, or any mods depending on Stonehearth's assets being vanilla inexplicably breaking. The right way of adding content into Stonehearth is through `.smod` files.
 
-### To Be Continued
+An `.smod` file contains all of your assets -- the `.json` files, the scripts, the images, the `.qb` files -- and a `manifest.json`, which tells Stonehearth how and where to add your content. The `.smod` itself is just a zipped-up and renamed folder.
+
+Let's make a new folder for our mod inside `Stonehearth/mods`, and give it a name:
+
+![Naturally](http://i.imgur.com/sZ2Agev.png)
+
+Inside, create a file called `manifest.json`, and edit it to this:
+
+    {
+      "info" : {
+        "name" : "Panabsorbium",
+        "version" : 1
+      },
+    }
+ 
+This is your basic mod declaration, which serves much the same purpose as Stonehearth's main `manifest.json`. It says that everything specified inside the folder containing this manifest belongs to the mod Panabsorbium. I'm not sure what the `version` field does, but it is required for the mod to work. For now, just save this file, and keep it open.
+
+Next, we'll have to drop our assets into this folder, too. Personally, I like to recreate the folder structure inside Stonehearth for consistency, so I create three directories:
+
+`entities/armor/panabsorbium_vest`
+`entities/refined/panabsorbium_ingot`
+`jobs/blacksmith/recipes`
+
+These are the four places where we've been either adding or modifying things (not including `manifest.json`, since we have our own one now) inside the main `mods/stonehearth` directory. To leave the main mod clean, let's **cut** the contents of those folders from `mods/stonehearth`, and replace them into `mods/panabsorbium`:
+
+    entities/armor/panabsorbium_vest
+      panabsorbium_vest.json
+      panabsorbium_vest.png
+      panabsorbium_vest.qb
+      panabsorbium_vest_female.qb
+      panabsorbium_vest_iconic.json
+      panabsorbium_vest_iconic.qb
+    entities/refined/panabsorbium_ingot
+      panabsorbium_ingot.json
+      panabsorbium_ingot.png
+      panabsorbium_ingot.qb
+    jobs/blacksmith/recipes
+      panabsorbium_ingot_recipe.json
+      panabsorbium_vest_recipe.json
+
+Now we tell `manifest.json` that these things exist in our mod, and what their aliases are, like we did for Stonehearth's main `manifest.json`:
+
+    {
+      "info" : {
+        "name" : "Panabsorbium",
+        "version" : 1
+      },
+      "aliases" : {
+        "armor:panabsorbium_vest" : "file(entities/armor/panabsorbium_vest)",
+        "refined:panabsorbium_ingot" : "file(entities/refined/panabsorbium_ingot)",
+        "buffs:panabsorbium_rush" : "file(data/buffs/panabsorbium_rush/panabsorbium_rush_buff.json)"
+      }
+    }
+
+Note that there's still one change missing: the Blacksmith doesn't know that he should have new recipes! We've modified his `recipes.json` file in Stonehearth's mod directory before, but we haven't carried this change over to our new mod. Have his old `recipes.json` file open, but also create a new `recipes.json` file inside `mods/panabsorbium/jobs/blacksmith/recipes`.
+
+We're going to mixinto this change into the old `recipes.json`. I like to think of mixintos almost as zippers: you put two files and "zip" them together, you get one file that's a combination of the two old files, with all the little teeth/data matching up perfectly. Case in point, our new `recipes.json` should look like this:
+
+    {
+      "craftable_recipes" : {
+        "smelt" : {
+          "recipes" : {
+            "panabsorbium_ingot" : {
+              "recipe" : "file(panabsorbium_ingot_recipe.json)"
+            }
+          }
+        },
+        "armor" : {
+          "recipes" :{
+            "panabsorbium_vest" : {
+              "recipe" : "file(panabsorbium_vest_recipe.json)"
+            }
+          }
+        }
+      }
+    }
+ 
+ If you look at Stonehearth's original `recipes.json` file, you'll see the similarities. Both start with `craftable_recipes`; they both have "categories" `smelt` and `armor`, which further both have `recipes` fields; after that, we add the same lines we added to the old `recipes.json` to make our recipes work. When the two files are "zipped together", you'll have our `craftable_recipes` go into their `craftable_recipes`; our `smelt` going into their `smelt`, and so on. Stonehearth will then consider our `recipes.json` and their `recipes.json` as essentially one and the same resource.
+
+Now we tell `manifest.json` what to mixinto:
+
+    {
+      "info" : {
+        "name" : "Panabsorbium",
+        "version" : 1
+      },
+      "aliases" : {
+        "armor:panabsorbium_vest" : "file(entities/armor/panabsorbium_vest)",
+        "refined:panabsorbium_ingot" : "file(entities/refined/panabsorbium_ingot)"
+      },
+      "mixintos" : {
+        "stonehearth/jobs/blacksmith/recipes/recipes.json" : "file(jobs/blacksmith/recipes/recipes.json)"
+      }
+    }
+ 
+You can leave the mod as a folder inside your `Stonehearth/mods` directory, or you can use your favourite archiving program (such as WinRAR, which I linked earlier in this post) to archive it into `panabsorbium.zip` and rename it to `panabsorbium.smod`.
+
+When testing, remember to modify your `mini_game_world.lua`: your armor will no longer be from `stonehearth:armor:panabsorbium_vest`, as `stonehearth` is no longer the name of the mod that contains it; instead, you're going to be referring to `panabsorbium:armor:panabsorbium_vest`, as that is your new mod.
+
+![Our freshly baked modded armor!!!](http://i.imgur.com/ZKLePn0.png)
+
+#You're Winner!
+![A winner is you](http://www.clker.com/cliparts/H/M/F/3/W/Y/trophy-yellow-cup-md.png)
+
+### Next steps
+
+If you got through this and still want more, try adding a buff to your new armor. Remember to look for existing examples of buffed armor, such as the advanced worker vest.
