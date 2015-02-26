@@ -1,7 +1,5 @@
 # Do It Yourself
 
-If you want to take the long route and put this mod together yourself, you're in the right place. Some blind poking around may take place, as this tutorial roughly mirrors my own experience writing this mod.
-
 Stonehearth was designed to be a mod-friendly game. Everything we do here can be accomplished with nothing more than renaming and copy-pasting certain things. If you are afraid to start because you don't know how to code, don't let that stop you. Most of what we'll be doing here is re-naming and copy-pasting configuration files rather than code.
 
 As of this writing (February 2015), Stonehearth is in Alpha 8. I will try to keep this tutorial up to date as new updates roll out and key files undergo change. As such, I will keep this tutorial simple and limited in scope, large enough to get you started on modding, and small enough to be updated easily. Our objectives are as follow:
