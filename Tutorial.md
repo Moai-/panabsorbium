@@ -5,7 +5,8 @@ Stonehearth was designed to be a mod-friendly game. Everything we do here can be
 As of this writing (February 2015), Stonehearth is in Alpha 8. I will try to keep this tutorial up to date as new updates roll out and key files undergo change. As such, I will keep this tutorial simple and limited in scope, large enough to get you started on modding, and small enough to be updated easily. Our objectives are as follow:
  * Add new armor to the game
  * Make the new armor craftable in-game
- * Add a new ingot to craft your armor with
+ * Add a new ingot for crafting your armor
+ * Package mod into `.smod`
 
 It's Alpha 8 and one can hardly kick a rock on a mountain without tripping on a glistening chunk of gold ore. So, we have a problem. Our stockpiles are overflowing with silver and gold. We can't sell them, we can't make things out of them, and we can't throw them at goblins. "These piles of precious metals have got to go," uttered no one until Stonehearth entered Alpha. For some reason, we decide that the best use for surplus bullion is making it into a suit of armor.
 
@@ -34,7 +35,7 @@ Yours won't look exactly like mine, but the idea should be similar enough. To ru
 
 StoneVox is an open-source `.qb` editor, which we will use to modify in-game assets. You can, of course, also create new ones from scratch, but I have the artistic gift of a mindless null and the heart of a modder, so I let my Ctrl+C and Ctrl+V do the talking. 
 
-LuaUnminifier is not essential for this mod, but I use it anyway for its capability to render minified Lua in a readable format, and for its convenient "search entire project" function. Although coding skills aren't essential for modding in general or this specific tutorial, the ability to debug an error will always come in handy when working with computers. Stonehearth is good about providing informative errors, so if you see that the game is complaining about not being able to find `some_item`, you do a search for `some_item` in the project, and realize you forgot to add `some_item.json` to the folder where it was supposed to be.
+LuaUnminifier is not essential for this mod, but I use it anyway for its capability to render minified Lua in a readable format, and for its well-designed "search entire project" function. If you know you aren't going to be touching major Lua files in Stonehearth (such as when you're making a mod as simple as adding craftable items), you can use your favourite editor to view the files instead. Just keep in mind that all screenshots from LuaUnminifier simply show the `mods/stonehearth` directory.
 
 Ok, got all the tools? Great. **If you skipped the previous part, begin again here.**
 
@@ -56,7 +57,7 @@ To do this, I navigate to my root Stonehearth directory, and open a command wind
 
 ![Or just do Windows button+R, then cd "your stonehearth directory"](http://i.imgur.com/vjaJMhH.png)
 
-I type in the following incantation to summon an instance of our Microworld:
+I type in the following to open an instance of our Microworld:
 
 ![Stonehearth.exe --game.main_mod=microworld](http://i.imgur.com/COJj3Yl.png)
 
@@ -74,7 +75,7 @@ Using Lua Unminifier, open `stonehearth.smod` inside your `mods_bup` directory.
 
 ![It should look like this](http://i.imgur.com/5aztqWf.png)
 
-Take a minute to explore Stonehearth and browse through its file directory. Many things are in directories that make sense, such as all of our armors being inside `entities/armor`, all blacksmith recipes being in `jobs/blacksmith/recipes`, and so on. It's like the Matrix, or staring at the wall while in the washroom: look long enough and patterns start to show up. You'll see labelled values, numbers, assets, etc that correspond to in-game objects. Changing them here changes them in-game, through dark magic. 
+Take a minute to explore Stonehearth and browse through its file directory. Many things are in directories that make sense, such as all of our armors being inside `entities/armor`, all blacksmith recipes being in `jobs/blacksmith/recipes`, and so on. It's like the Matrix, or staring at the wall while in the restroom: look long enough and patterns start to show up. You'll see labelled values, numbers, assets, etc that correspond to in-game objects. Changing them here changes them in-game, through dark magic. 
 
 We're making an armor, and we need a place to start. So let's pop open `steel_mail`:
 
